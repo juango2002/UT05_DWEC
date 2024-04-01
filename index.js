@@ -79,6 +79,27 @@ function cargarDatosIniciales() {
                 datosPagina.categorias[1].platos[1], // Pasta
                 datosPagina.categorias[2].platos[1]  // Helado
             ]
+        },
+        {
+            nombre: "Menú Familiar",
+            platos: [
+                datosPagina.categorias[0].platos[2], // Bravas
+                datosPagina.categorias[1].platos[2], // Filete
+                datosPagina.categorias[2].platos[2]  // Flan
+            ]
+        }
+    ];
+
+    datosPagina.restaurantes = [
+        {
+            nombre: "Restaurante XYZ",
+            descripcion: "Restaurante de comida internacional",
+            direccion: "Calle Principal 123"
+        },
+        {
+            nombre: "Restaurante ABC",
+            descripcion: "Restaurante de cocina local",
+            direccion: "Avenida Secundaria 456"
         }
     ];
 }
@@ -259,7 +280,6 @@ function opcionesAdicionales(ul) {
     var a = document.createElement("a");
     a.classList.add("nav-link");
     a.classList.add("dropdown-toggle"); // Agregar la clase 'dropdown-toggle' para indicar que este elemento es el control del menú desplegable
-    a.href = "#";
     a.textContent = "Alérgenos";
     a.setAttribute("role", "button");
     a.setAttribute("data-bs-toggle", "dropdown"); // Agregar el atributo 'data-bs-toggle' para activar el menú desplegable
@@ -285,7 +305,6 @@ function opcionesAdicionales(ul) {
     var a = document.createElement("a");
     a.classList.add("nav-link");
     a.classList.add("dropdown-toggle"); // Agregar la clase 'dropdown-toggle' para indicar que este elemento es el control del menú desplegable
-    a.href = "#";
     a.textContent = "Menús";
     a.setAttribute("role", "button");
     a.setAttribute("data-bs-toggle", "dropdown"); // Agregar el atributo 'data-bs-toggle' para activar el menú desplegable
@@ -298,6 +317,31 @@ function opcionesAdicionales(ul) {
     datosPagina.menus.forEach(function (menu) {
         var dropdownItem = document.createElement("li");
         dropdownItem.innerHTML = `<a class="dropdown-item" onclick="mostrarPlatosPorMenu('${menu.nombre}')">${menu.nombre}</a>`;
+        dropdownMenu.appendChild(dropdownItem);
+    });
+    li.appendChild(dropdownMenu);
+
+    ul.appendChild(li);
+
+    // Restaurantes
+    var li = document.createElement("li");
+    li.classList.add("nav-item");
+    li.classList.add("dropdown"); // Agregar la clase 'dropdown' para crear un menú desplegable
+    var a = document.createElement("a");
+    a.classList.add("nav-link");
+    a.classList.add("dropdown-toggle"); // Agregar la clase 'dropdown-toggle' para indicar que este elemento es el control del menú desplegable
+    a.textContent = "Restaurantes";
+    a.setAttribute("role", "button");
+    a.setAttribute("data-bs-toggle", "dropdown"); // Agregar el atributo 'data-bs-toggle' para activar el menú desplegable
+    a.setAttribute("aria-expanded", "false");
+    li.appendChild(a);
+
+    var dropdownMenu = document.createElement("ul");
+    dropdownMenu.classList.add("dropdown-menu"); // Agregar la clase 'dropdown-menu' para el menú desplegable
+    dropdownMenu.setAttribute("aria-labelledby", "navbarDropdown");
+    datosPagina.restaurantes.forEach(function (restaurante) {
+        var dropdownItem = document.createElement("li");
+            dropdownItem.innerHTML = `<a class="dropdown-item" onclick="mostrarFichaRestaurante('${restaurante.nombre}', '${restaurante.descripcion}', '${restaurante.direccion}')">${restaurante.nombre}</a>`;
         dropdownMenu.appendChild(dropdownItem);
     });
     li.appendChild(dropdownMenu);
@@ -372,6 +416,29 @@ function mostrarPlatosPorMenu(menu) {
 
     // Actualizar las migas de pan
     actualizarMigasDePan(menu);
+    mostrarMigasDePan();
+}
+
+function mostrarFichaRestaurante(nombre, desc, direccion) {
+    // Crear un div para mostrar la ficha del plato
+    var fichaHTML = `
+        <div class="ficha-restaurante">
+            <div class="ficha-restaurante-header">
+                <h5 class="ficha-restaurante-title">${nombre}</h5>
+                <br>
+            </div>
+            <div class="ficha-restaurante-body" style="width: 400px;">
+                <p><strong>Descripción:</strong> ${desc}</p>
+                <p><strong>Localización:</strong> ${direccion}</p>
+            </div>
+        </div>
+    `;
+
+    var zonaCentral = document.getElementById("zona-central");
+    zonaCentral.innerHTML = ""; // Limpiamos el contenido existente
+    zonaCentral.innerHTML = fichaHTML;
+
+    actualizarMigasDePan(nombre);
     mostrarMigasDePan();
 }
 
