@@ -78,35 +78,57 @@ function mostrarCategorias() {
 // Función para mostrar platos aleatorios en la página inicial
 function mostrarPlatosAleatorios() {
     var zonaCentral = document.getElementById("zona-central");
-    zonaCentral.innerHTML = ""; // Limpiamos el contenido existente
+    // zonaCentral.innerHTML = ""; // Limpiamos el contenido existente
     var platosAleatorios = [];
     for (var i = 0; i < 3; i++) {
         var categoriaAleatoria = datosPagina.categorias[Math.floor(Math.random() * datosPagina.categorias.length)];
         var platoAleatorio = categoriaAleatoria.platos[Math.floor(Math.random() * categoriaAleatoria.platos.length)];
         platosAleatorios.push(platoAleatorio);
     }
-    var platosHTML = "<h2>Platos Aleatorios</h2>";
+    var platosHTML = "<h2 class='w-100'>Platos Aleatorios</h2>"; // Agregamos una clase 'w-100' para que el título ocupe todo el ancho de la columna
     platosAleatorios.forEach(function(plato) {
-        platosHTML += `<p>${plato.nombre}</p>`;
+        platosHTML += `
+            <div class="col mb-4">
+                <div class="card">
+                    <img src="${plato.imagen}" class="card-img-top" alt="${plato.nombre}">
+                    <div class="card-body">
+                        <h5 class="card-title">${plato.nombre}</h5>
+                    </div>
+                </div>
+            </div>`;
     });
-    zonaCentral.innerHTML = platosHTML;
+    zonaCentral.innerHTML += platosHTML;
 }
 
 // Función para mostrar los platos de una categoría específica
 function mostrarPlatosPorCategoria(categoria) {
+    // Obtener todos los elementos de la lista de navegación
+    var opciones = document.querySelectorAll('.navbar-nav .nav-link');
+
+    // Iterar sobre cada opción y eliminar la clase 'active'
+    opciones.forEach(function(opcion) {
+        opcion.classList.remove('active');
+    });
+
+    // Agregar la clase 'active' solo al elemento clicado
+    event.target.classList.add('active');
+    
     var zonaCentral = document.getElementById("zona-central");
     zonaCentral.innerHTML = ""; // Limpiamos el contenido existente
     if(categoria === "Inicio") {
+        mostrarCategorias();
         mostrarPlatosAleatorios();
         actualizarMigasDePan(categoria);
         mostrarMigasDePan();
+        cambiarMenuNav(datosPagina.categorias, "categorias");
         return;
     }
+
     datosPagina.categorias.forEach(function(cat) {
         if (cat.nombre === categoria) {
             var categoriaHTML = document.createElement("div");
-            categoriaHTML.classList.add("col-md-6");
-            categoriaHTML.innerHTML = `<h3>${categoria}</h3>`;
+            categoriaHTML.classList.add("col-md-4");
+            categoriaHTML.innerHTML = `<h3>${categoria}</h3><br>`;
             cat.platos.forEach(function(plato) {
                 var platoHTML = document.createElement("div");
                 platoHTML.innerHTML = `<img class="img-fluid" src="${plato.imagen}">`;
@@ -117,6 +139,8 @@ function mostrarPlatosPorCategoria(categoria) {
                 categoriaHTML.appendChild(platoHTML);
             });
             zonaCentral.appendChild(categoriaHTML);
+
+            cambiarMenuNav(cat.platos, "platos");
         }
     });
 
@@ -161,11 +185,52 @@ function mostrarAlergenos() {
     zonaCentral.innerHTML = alergenosHTML;
 }
 
+function cambiarMenuNav(lista, tipo) {
+    var menuNav = document.getElementById("navbarNav");
+    menuNav.innerHTML = "";
+    var ul = document.createElement("ul");
+    ul.classList.add("navbar-nav");
+
+    opcionInicio(ul);
+
+    lista.forEach(function(item) {
+        var li = document.createElement("li");
+        li.classList.add("nav-item");
+        var a = document.createElement("a");
+        a.classList.add("nav-link");
+        a.textContent = item.nombre;
+        // Agregar el evento onclick para mostrar la ficha del plato
+        a.onclick = function() {
+            if(tipo === "platos") {
+                mostrarFichaPlato(item);
+            } else if (tipo === "categorias") {
+                mostrarPlatosPorCategoria(item.nombre);
+            }
+        };
+        li.appendChild(a);
+        ul.appendChild(li);
+    });
+    menuNav.appendChild(ul);
+}
+
+function opcionInicio(ul) {
+    var li = document.createElement("li");
+    li.classList.add("nav-item");
+    var a = document.createElement("a");
+    a.classList.add("nav-link");
+    a.textContent = "Inicio";
+    a.onclick = function() {
+        mostrarPlatosPorCategoria("Inicio");
+    }
+    li.appendChild(a);
+    ul.appendChild(li);
+}
+
 // Función para inicializar la página
 function inicializarPagina() {
     cargarDatosIniciales();
     mostrarCategorias();
-    // mostrarPlatosAleatorios();
+    mostrarPlatosAleatorios();
 }
 
 // Evento onLoad para inicializar la página cuando se cargue

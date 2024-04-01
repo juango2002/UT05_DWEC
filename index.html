@@ -9,7 +9,7 @@
     <!-- Agrega tu propio archivo de estilos si es necesario -->
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class ="bg-light">
     <!-- Cabecera -->
     <header class="bg-dark text-white text-center py-3">
         <h1>Tarea DWEC05</h1>
@@ -42,39 +42,28 @@
     
 
     <!-- Zona central para el contenido -->
-    <div class="container mt-4">
-        <div class="row">
+    <main class="flex-grow-1">
+        <div class="container mt-4">
             <!-- Migas de pan -->
-            <div id="migas-de-pan">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <!-- <li class="breadcrumb-item active" aria-current="page">Inicio</li> -->
-                    </ol>
-                </nav>
-            </div>
-        </div>
-        <div class="row">
+            <nav id="migas-de-pan" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <!-- <li class="breadcrumb-item active" aria-current="page">Inicio</li> -->
+                </ol>
+            </nav>
+
             <!-- Contenido dinámico -->
-            <div class="col-md-10">
-                <!-- Contenido generado dinámicamente se mostrará aquí -->
-                <div id="zona-central">
+            <div class="row">
+                <div class="col-md-10">
+                    <div id="zona-central" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                        <!-- Aquí van los elementos del grid -->
+                    </div>
                 </div>
             </div>
-            <!-- Sidebar -->
-            <div class="col-md-2">
-                <!-- Contenido de la barra lateral -->
-                <h3>Barra Lateral</h3>
-                <ul>
-                    <li><a href="#">Alérgenos</a></li>
-                    <li><a href="#">Menús</a></li>
-                    <li><a href="#">Restaurantes</a></li>
-                </ul>
-            </div>
         </div>
-    </div>
+    </main>
 
     <!-- Pie de página -->
-    <footer class="bg-dark text-white text-center py-3 mt-4">
+    <footer class="bg-dark text-white text-center py-3 mt-4 mb-0">
         <p>&copy; 2024 Juan Carlos Gómez Ocaña. Todos los derechos reservados.</p>
     </footer>
 
